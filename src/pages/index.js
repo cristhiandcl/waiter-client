@@ -1,9 +1,9 @@
-import Home from "./home";
+import Login from "./login";
 
 function App() {
   return (
     <div>
-      <Home />
+      <Login />
     </div>
   );
 }
