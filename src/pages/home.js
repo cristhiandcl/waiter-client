@@ -10,7 +10,7 @@ function Home() {
   const [orders, setOrders] = useState([]);
   const [isNewElement, setIsNewElement] = useState(false);
   const user = getAuth(app).currentUser;
-  const id = user.uid;
+  const id = user?.uid;
 
   console.log(orders);
 
