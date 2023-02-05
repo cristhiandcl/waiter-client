@@ -1,43 +1,53 @@
 import { getAuth } from "firebase/auth";
 import app from "firebaseConfig";
 import React, { useEffect, useState } from "react";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { doc, getDoc, getFirestore, onSnapshot } from "firebase/firestore";
+import Order from "@/components/Order";
 
 const db = getFirestore(app);
 
 function Home() {
   const [orders, setOrders] = useState([]);
+  const [isNewElement, setIsNewElement] = useState(false);
   const user = getAuth(app).currentUser;
+  const id = user.uid;
+
+  console.log(orders);
+
+  useEffect(
+    () =>
+      onSnapshot(doc(db, "users", id), () => {
+        setIsNewElement((prev) => !prev);
+      }),
+    []
+  );
 
   useEffect(() => {
-    const getOrders = async () => {
+    (async () => {
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
       setOrders(docSnap.data().orders);
-      console.log("Looking for new data");
-    };
-
-    setInterval(getOrders, 12 * 1000);
-    getOrders();
-
-    return () => {
-      clearInterval();
-    };
-  }, []);
+    })();
+  }, [isNewElement]);
 
   const renderOrders = orders?.map((order, index) => (
-    <div className="bg-green-800 p-4 flex flex-col items-center justify-center font-extrabold text-xl hover:scale-105 rounded-xl">
-      <p className="text-white">Order {index + 1}</p>
-      <p className="items-center">{order.id}</p>
-      <p className="text-white">{order.order.length} items</p>
-    </div>
+    <Order order={order} index={index} key={order.id} />
   ));
-  // console.log(orders);
 
   return (
-    <div className="bg-green-200 h-screen pt-4">
-      <p className="text-center font-extrabold text-4xl">Orders Manager</p>
-      <div className="grid grid-cols-2 gap-4 m-4">{renderOrders}</div>
+    <div
+      className={`flex flex-col ${orders.length > 0 ? "h-full" : "h-screen"}`}
+    >
+      <p className="text-center font-extrabold text-4xl mt-4">Orders Manager</p>
+      {orders.length > 0 ? (
+        <div className="grid grid-cols-3 gap-4 m-12">{renderOrders}</div>
+      ) : (
+        // <div className="h-full flex flex-col items-center justify-center border">
+        <p className="flex flex-col self-center justify-center font-extrabold text-8xl text-green-800 text-center h-full">
+          Let's get some Orders
+        </p>
+        // </div>
+      )}
     </div>
   );
 }
