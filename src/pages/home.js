@@ -36,10 +36,10 @@ function Home() {
 
   return (
     <div
-      className={`flex flex-col ${orders.length > 0 ? "h-full" : "h-screen"}`}
+      className={`flex flex-col ${orders?.length > 0 ? "h-full" : "h-screen"}`}
     >
       <p className="text-center font-extrabold text-4xl mt-4">Orders Manager</p>
-      {orders.length > 0 ? (
+      {orders?.length > 0 ? (
         <div className="grid grid-cols-3 gap-4 m-12">{renderOrders}</div>
       ) : (
         // <div className="h-full flex flex-col items-center justify-center border">
