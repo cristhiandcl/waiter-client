@@ -20,7 +20,6 @@ function signIn() {
 
   const createUser = (event) => {
     event.preventDefault();
-    console.log(userData);
     createUserWithEmailAndPassword(auth, userData.email, userData.password)
       .then((userCredential) => {
         // Signed in
