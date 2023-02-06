@@ -12,8 +12,6 @@ function Home() {
   const user = getAuth(app).currentUser;
   const id = user?.uid;
 
-  console.log(orders);
-
   useEffect(
     () =>
       onSnapshot(doc(db, "users", id), () => {

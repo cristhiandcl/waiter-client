@@ -2,6 +2,9 @@ import React, { useMemo, useState } from "react";
 
 function Order({ order, index }) {
   const [groupItemsInBasket, setGroupItemsInBasket] = useState([]);
+  const [isHold, setIsHold] = useState(false);
+  const [isHold2, setIsHold2] = useState(false);
+  const [message, setMessage] = useState("");
   const items = order?.order;
 
   useMemo(() => {
@@ -22,25 +25,38 @@ function Order({ order, index }) {
         individualItems = [];
       }
     });
-
     setGroupItemsInBasket(groupAllItems);
-  }, [items]);
+
+    return () => {};
+  }, [items.length]);
 
   const renderOrderItems = groupItemsInBasket?.map((item) => (
-    <div className="flex flex-row items-center  justify-center space-x-4">
+    <div className="flex flex-row items-center justify-center space-x-4">
       <p className="text-center text-xl">{item[0].name}</p>
       <p className="text-red-700 text-4xl">x{item.length}</p>
     </div>
   ));
 
-  console.log("Rendered");
+  const preparing = () => {
+    setIsHold(!isHold);
+    setMessage("Preparing...");
+  };
+  // console.log("rendered");
+
+  const done = () => {
+    setIsHold2(true);
+    setMessage("Dispatched");
+  };
+
   return (
     <div
       key={index}
-      className="bg-green-800 py-10 flex flex-col items-center justify-center font-extrabold text-xl hover:scale-105 rounded-xl space-y-6"
+      className={`${
+        isHold ? "bg-blue-300" : "bg-green-800"
+      } py-10 flex relative flex-col items-center justify-center font-extrabold text-xl hover:scale-105 rounded-xl space-y-6`}
     >
       <p className="text-white text-4xl">Order {index + 1}</p>
-      <div>{renderOrderItems}</div>
+      <div className="z-10">{renderOrderItems}</div>
       <div className="text-white text-2xl flex flex-row space-x-8">
         <p>Order Total</p>
         <p className="text-red-700">
@@ -52,6 +68,31 @@ function Order({ order, index }) {
             .replace(",00", "")}
         </p>
       </div>
+      {isHold && (
+        <p
+          className={`absolute text-6xl -z-0   ${
+            isHold2 ? "text-green-800 opacity-60" : "text-white opacity-30"
+          }`}
+        >
+          {message}
+        </p>
+      )}
+      {isHold && !isHold2 && (
+        <button
+          className="absolute top-0 right-6 p-2 text-green-800"
+          onClick={done}
+        >
+          Done
+        </button>
+      )}
+      {!isHold && (
+        <button
+          className="absolute top-0 left-4 p-2 text-red-600"
+          onClick={preparing}
+        >
+          Prepare
+        </button>
+      )}
     </div>
   );
 }
