@@ -42,11 +42,9 @@ function Home() {
       {orders?.length > 0 ? (
         <div className="grid grid-cols-3 gap-4 m-12">{renderOrders}</div>
       ) : (
-        // <div className="h-full flex flex-col items-center justify-center border">
         <p className="flex flex-col self-center justify-center font-extrabold text-8xl text-green-800 text-center h-full">
           Let's get some Orders
         </p>
-        // </div>
       )}
     </div>
   );
