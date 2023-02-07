@@ -30,8 +30,11 @@ function Order({ order, index }) {
     return () => {};
   }, [items.length]);
 
-  const renderOrderItems = groupItemsInBasket?.map((item) => (
-    <div className="flex flex-row items-center justify-center space-x-4">
+  const renderOrderItems = groupItemsInBasket?.map((item, index) => (
+    <div
+      className="flex flex-row items-center justify-center space-x-4"
+      key={index}
+    >
       <p className="text-center text-xl">{item[0].name}</p>
       <p className="text-red-700 text-4xl">x{item.length}</p>
     </div>
@@ -41,7 +44,6 @@ function Order({ order, index }) {
     setIsHold(!isHold);
     setMessage("Preparing...");
   };
-  // console.log("rendered");
 
   const done = () => {
     setIsHold2(true);
@@ -52,8 +54,10 @@ function Order({ order, index }) {
     <div
       key={index}
       className={`${
-        isHold ? "bg-blue-300" : "bg-green-800"
-      } py-10 flex relative flex-col items-center justify-center font-extrabold text-xl hover:scale-105 rounded-xl space-y-6`}
+        isHold && !isHold2 ? "bg-green-600" : "bg-green-800"
+      } py-10 flex relative flex-col items-center justify-center font-extrabold text-xl rounded-xl space-y-6 ${
+        isHold2 ? "opacity-60" : "hover:scale-105"
+      }`}
     >
       <p className="text-white text-4xl">Order {index + 1}</p>
       <div className="z-10">{renderOrderItems}</div>
@@ -71,7 +75,7 @@ function Order({ order, index }) {
       {isHold && (
         <p
           className={`absolute text-6xl -z-0   ${
-            isHold2 ? "text-green-800 opacity-60" : "text-white opacity-30"
+            isHold2 ? "text-green-400 opacity-50" : "text-white opacity-30"
           }`}
         >
           {message}
