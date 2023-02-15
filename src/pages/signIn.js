@@ -16,6 +16,7 @@ function signIn() {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
+    restaurant: "",
   });
 
   const createUser = (event) => {
@@ -30,7 +31,7 @@ function signIn() {
           (async () => {
             await setDoc(
               doc(db, "users", user.uid),
-              { user: `${userData.name}` },
+              { restaurantName: `${userData.restaurant}` },
               { merge: true }
             );
           })();
@@ -61,6 +62,17 @@ function signIn() {
         className="space-y-6 flex flex-col items-center justify-center w-1/6"
         onSubmit={createUser}
       >
+        <div className="space-y-2 w-full">
+          <p className="font-extrabold">Restaurant Name</p>
+          <input
+            className="border-2 p-2 w-full"
+            value={userData.restaurant}
+            onChange={(event) =>
+              setUserData({ ...userData, restaurant: event.target.value })
+            }
+            placeholder="Password"
+          />
+        </div>
         <div className="space-y-2 w-full">
           <p className="font-extrabold">E-mail</p>
           <input
